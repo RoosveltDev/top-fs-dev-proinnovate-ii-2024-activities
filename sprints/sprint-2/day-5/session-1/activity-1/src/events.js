@@ -1,9 +1,11 @@
-// src/events.js
 import { getContacts, saveContacts } from "./storage.js";
 import { renderContacts, showError } from "./dom.js";
 import { validateName, validatePhone } from "./validation.js";
 
-export function setupEventListeners() {
+/**
+ * Sets up the event listeners for the contact management application.
+ */
+export const setupEventListeners = () => {
     let contacts = getContacts();
     const contactList = document.getElementById("contactList");
     const filterInput = document.getElementById("filter");
@@ -11,7 +13,11 @@ export function setupEventListeners() {
     const addContactBtn = document.getElementById("addContactBtn");
     const contactForm = document.getElementById("contacts");
 
-    contactForm.onsubmit = function(e) {
+    /**
+     * Handles the form submission event for adding a contact.
+     * @param {Event} e - The form submission event.
+     */
+    contactForm.onsubmit = (e) => {
         e.preventDefault();
 
         const name = document.getElementById("name").value.trim();
@@ -49,7 +55,11 @@ export function setupEventListeners() {
         contactForm.reset();
     };
 
-    contactList.onclick = function(e) {
+    /**
+     * Handles the click event on the contact list.
+     * @param {Event} e - The click event.
+     */
+    contactList.onclick = (e) => {
         if (e.target.classList.contains("delete-btn")) {
             const contactId = e.target.parentElement.getAttribute("data-id");
             contacts = contacts.filter((contact) => contact.id !== Number(contactId));
@@ -64,7 +74,7 @@ export function setupEventListeners() {
             document.getElementById("phone").value = contactToEdit.phone;
 
             addContactBtn.textContent = "Update Contact";
-            addContactBtn.onclick = function() {
+            addContactBtn.onclick = () => {
                 const updatedName = document.getElementById("name").value.trim();
                 const updatedPhone = document.getElementById("phone").value.trim();
 
@@ -99,7 +109,10 @@ export function setupEventListeners() {
         }
     };
 
-    filterInput.oninput = function() {
+    /**
+     * Handles the input event on the filter field.
+     */
+    filterInput.oninput = () => {
         const filterValue = filterInput.value.toLowerCase();
         const filteredContacts = contacts.filter(
             (contact) =>
@@ -109,10 +122,13 @@ export function setupEventListeners() {
         renderContacts(contactList, filteredContacts);
     };
 
-    clearFilterBtn.onclick = function() {
+    /**
+     * Handles the click event on the clear filter button.
+     */
+    clearFilterBtn.onclick = () => {
         filterInput.value = "";
         renderContacts(contactList, contacts);
     };
 
     renderContacts(contactList, contacts);
-}
+};
